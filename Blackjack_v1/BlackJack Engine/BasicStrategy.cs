@@ -1,20 +1,31 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Blackjack_v1
 {
     public static class BasicStrategy
     {
+        private static ReadOnlyCollection<int> notValidSplitValues = new ReadOnlyCollection<int>(
+            new[] {
+                (int)Enums.Value.Five,
+                (int)Enums.Value.Ten,
+                (int)Enums.Value.Jack,
+                (int)Enums.Value.Queen,
+                (int)Enums.Value.King
+            });
+
         public static Enums.PlayAction DeterminePlayerNextPlay(List<int> cardValues, int dealerCardValue)
         {
             Enums.PlayAction result;
             bool isSplit;
             bool isSoft;
+
             var handValue = DetermineHandValue(cardValues, out isSplit, out isSoft);
 
-            if (isSplit && cardValues.First() != 5)
+            if (isSplit && !notValidSplitValues.Contains(cardValues.First()))
             {
-                result = DoSplitRules(cardValues.First(), dealerCardValue);
+                result = DoSplitRules(cardValues.First(), dealerCardValue);            
             }
             else if (isSoft)
             {
@@ -22,6 +33,7 @@ namespace Blackjack_v1
             }
             else
             {
+                isSplit = false;
                 result = DoHardRules(handValue, dealerCardValue);
             }
             return result;      
@@ -59,7 +71,10 @@ namespace Blackjack_v1
             {
                 if (handValue + 11 <= 21)
                 {
-                    isSoft = true;
+                    if (handValue + 11 == 12 && isSplit)
+                        isSoft = false;
+                    else
+                        isSoft = true;
                     return handValue + 11;
                 }
                 return handValue + 1;
@@ -169,7 +184,7 @@ namespace Blackjack_v1
             {
                 result = Enums.PlayAction.Stand;
             }
-            if (handValue >= 16 && handValue <= 13)
+            if (handValue <= 16 && handValue >= 13)
             {
                 if (dealerHandValue <= 6 && dealerHandValue != 1)
                 {

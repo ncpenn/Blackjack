@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BlackJack Engine\BasicStrategy.cs" />
     <Compile Include="Helpers\DealerHelper.cs" />
+    <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Entities\Dealer.cs" />
     <Compile Include="Models\DealtCard.cs" />

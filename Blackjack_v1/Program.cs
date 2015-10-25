@@ -19,8 +19,6 @@ namespace Blackjack_v1
 
             
             //add "report" for final numbers of card counting
-
-            //add unit tests https://www.visualstudio.com/en-us/get-started/code/create-and-run-unit-tests-vs
         }
     }
 }

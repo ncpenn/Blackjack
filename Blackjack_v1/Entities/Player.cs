@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blackjack_v1.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,7 +30,7 @@ namespace Blackjack_v1
                 }
                 else
                 {
-                    var bet = FigureBetSize(minimumBet);
+                    var bet = PlayerHelper.FigureBetSize(minimumBet, lastBet);
                     if (BankRoll >= bet) return bet;
                     if (BankRoll >= minimumBet) return minimumBet;
                     return 0;
@@ -59,45 +60,7 @@ namespace Blackjack_v1
                 return false;
             }
 
-            return ShouldAskForAnotherCard(cardValues, dealerCard, out specialAction, isForRegularPile);       
-        }
-
-        private int FigureBetSize(int minimumBet)
-        {
-            var ceilingBet = 8 * minimumBet;
-
-            if (lastBet * 2 <= ceilingBet)
-            {
-                return lastBet * 2;
-            }
-            return ceilingBet;
-        }
-        
-        private bool ShouldAskForAnotherCard(List<int> cardValues, DealtCard dealerCard, out string specialAction, bool isForRegularPile)
-        {
-            specialAction = string.Empty;
-            var action = BasicStrategy.DeterminePlayerNextPlay(cardValues, (int)dealerCard.Value);
-
-            var random = new Random();
-            var chanceOfPlayingRight = random.Next(0, 101);
-
-            if (chanceOfPlayingRight <= howCloseToPerfectStategy.PercentValue)
-            {
-                switch (action)
-                {
-                    case Enums.PlayAction.Double:
-                        specialAction = "double";
-                        return true;
-                    case Enums.PlayAction.Stand:
-                        return false;
-                    case Enums.PlayAction.Hit:
-                        return true;
-                    default:
-                        specialAction = "split";
-                        return isForRegularPile;
-                }
-            }
-            return true;
+            return PlayerHelper.ShouldAskForAnotherCard(cardValues, dealerCard, out specialAction, isForRegularPile, howCloseToPerfectStategy);       
         }
     }
 }
