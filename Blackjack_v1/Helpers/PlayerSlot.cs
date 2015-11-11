@@ -24,9 +24,16 @@ namespace Blackjack_v1
             CardTotalsInfo = info;
         }
 
-        public void LayDownBet(int minimumBet, int theCount, int totalCardsDealt)
+        public void LayDownBet(int minimumBet, int theCount, int totalCardsDealt, bool betForSplit)
         {
-            BetAmount = Player.PlaceBet(minimumBet, theCount, totalCardsDealt);
+            if (betForSplit)
+            {
+                BetAmountOnSplit = Player.PlaceBet(minimumBet, theCount, totalCardsDealt);
+            }
+            else
+            {
+                BetAmount = Player.PlaceBet(minimumBet, theCount, totalCardsDealt);
+            } 
         }
 
         public bool ShouldCountBeReset(int totalCardsDealt)

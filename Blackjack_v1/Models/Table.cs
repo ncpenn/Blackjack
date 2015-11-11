@@ -22,6 +22,7 @@ namespace Blackjack_v1
             TableMinBet = minBet;
             PercentOfDeckLeftTriggeringShuffle = whenToShuffle;
             DecksInUse = numberOfDecksToBeUsed;
+            CardsVisibleThisRound = new ObservableCollection<DealtCard>();
 
             foreach (var player in players)
             {
@@ -38,15 +39,13 @@ namespace Blackjack_v1
         {
             if (e != null && e.NewItems != null)
             {                   
-                foreach (var card in e.NewItems /*as IList<DealtCard>*/)
+                foreach (DealtCard card in e.NewItems)
                 {
-                    var actualCard = (DealtCard)card;
-                    //CardsVisibleThisRound.Add(actualCard);
-                    if (actualCard.Value == Enums.Value.Five)
+                    if (card.Value == Enums.Value.Five)
                     {
                         TheCount += 1;
                     }
-                    if (actualCard.Value == Enums.Value.Ace)
+                    if (card.Value == Enums.Value.Ace)
                     {
                         TheCount -= 1;
                     }

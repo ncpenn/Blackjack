@@ -14,7 +14,7 @@ namespace Blackjack_v1
                 player2
             };
 
-            var dealer = new Dealer(players, 10000, 6, 5, new Percent(25));
+            var dealer = new Dealer(players, 100000, 6, 5, new Percent(25));
             dealer.StartGame();
 
             

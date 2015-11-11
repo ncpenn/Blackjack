@@ -265,13 +265,13 @@ namespace Blackjack_v1
 
             if (cardValue == 7)
             {
-                if (dealerCardValue <= 7)
+                if (dealerCardValue >= 8 || dealerCardValue == 1)
                 {
-                    result = Enums.PlayAction.Split;
+                    result = Enums.PlayAction.Hit;
                 }
                 else
                 {
-                    result = Enums.PlayAction.Hit;
+                    result = Enums.PlayAction.Split;
                 }
             }
 

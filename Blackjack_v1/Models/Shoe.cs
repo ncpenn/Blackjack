@@ -23,7 +23,7 @@ namespace Blackjack_v1
         {
             if (CheckCardsLeftInShoe(numberOfCardsRequested))
             {
-                var results = LoadedShoe.Take(numberOfCardsRequested);
+                var results = LoadedShoe.Take(numberOfCardsRequested).ToList();
                 LoadedShoe.RemoveRange(0, numberOfCardsRequested);
                 return results;
             }
@@ -46,7 +46,8 @@ namespace Blackjack_v1
         {
             var percentOfCardsLeft = (double)LoadedShoe.Count / initialCountOfCardsInShoe;
             var percentWhenToShuffle = whenToShuffle.PercentValue / (double)100;
-            if (percentOfCardsLeft < percentWhenToShuffle)
+            if (percentOfCardsLeft < percentWhenToShuffle || 
+                (numberOfCards > LoadedShoe.Count && numberOfCards < initialCountOfCardsInShoe))
             {
                 LoadShoe();
             }

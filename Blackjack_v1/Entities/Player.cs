@@ -30,7 +30,7 @@ namespace Blackjack_v1
                 }
                 else
                 {
-                    var bet = PlayerHelper.FigureBetSize(minimumBet, lastBet);
+                    var bet = PlayerHelper.FigureBetSize(minimumBet, theCount);
                     if (BankRoll >= bet) return bet;
                     if (BankRoll >= minimumBet) return minimumBet;
                     return 0;

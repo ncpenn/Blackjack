@@ -22,7 +22,6 @@ namespace Blackjack_v1
 
         public void StartGame()
         {
-            table.CardsVisibleThisRound = new ObservableCollection<DealtCard>();
             table.CardsVisibleThisRound.CollectionChanged += table.DealtCard_CollectionChanged;
             for (var round = 0; round < numberOfRounds; round++)
             {
@@ -31,7 +30,7 @@ namespace Blackjack_v1
                 ResetStandingFlag();
                 dealersCards.Clear();
 
-                SetBets(table.TableMinBet, table.TheCount);
+                SetBets(table.TableMinBet, table.TheCount, false);
 
                 var initialCards = GetIntialRoundOfCards().ToList();
                 //GivePlayersTheirInitialCards(ref initialCards);
@@ -56,38 +55,44 @@ namespace Blackjack_v1
             }
         }
 
-        
-
         private void SettleBetsWithPlayers()
         {
             var listOfDealerCardValues = dealersCards.Select(card => (int)card.Value).ToList();
             var dealerTotal = BasicStrategy.DetermineHandValue(listOfDealerCardValues);
             foreach (var playerSeat in table.PlayerSlots)
             {
-                var listOfPlayerCardValues = playerSeat.DealtCards.Select(card => (int)card.Value).ToList();
-                var handTotal = BasicStrategy.DetermineHandValue(listOfPlayerCardValues);
-
-                if (handTotal > 21)
+                var handTotal = BasicStrategy.DetermineHandValue(playerSeat.DealtCards.Select(card => (int)card.Value).ToList());
+                AddOrSubtractBets(playerSeat, handTotal, dealerTotal, playerSeat.BetAmount);
+                if (playerSeat.Split.Count > 0)
                 {
-                    playerSeat.Player.BankRoll -= playerSeat.BetAmount;
-                }
-                else if (dealerTotal > 21)
-                {
-                    playerSeat.Player.BankRoll += playerSeat.BetAmount;
-                }
-                else
-                {
-                    if (dealerTotal > handTotal)
-                    {
-                        playerSeat.Player.BankRoll -= playerSeat.BetAmount;
-                    }
-                    else if (dealerTotal < handTotal)
-                    {
-                        playerSeat.Player.BankRoll += playerSeat.BetAmount;
-                    }
+                    var splitHandTotal = BasicStrategy.DetermineHandValue(playerSeat.Split.Select(card => (int)card.Value).ToList());
+                    AddOrSubtractBets(playerSeat, splitHandTotal, dealerTotal, (int)playerSeat.BetAmountOnSplit);
                 }
                 playerSeat.DealtCards.Clear();
                 playerSeat.Split.Clear();
+            }
+        }
+
+        private void AddOrSubtractBets(PlayerSlot playerSeat, int handTotal, int dealerTotal, int betAmount)
+        {          
+            if (handTotal > 21)
+            {
+                playerSeat.Player.BankRoll -= betAmount;
+            }
+            else if (dealerTotal > 21)
+            {
+                playerSeat.Player.BankRoll += betAmount;
+            }
+            else
+            {
+                if (dealerTotal > handTotal)
+                {
+                    playerSeat.Player.BankRoll -= betAmount;
+                }
+                else if (dealerTotal < handTotal)
+                {
+                    playerSeat.Player.BankRoll += betAmount;
+                }
             }
         }
 
@@ -167,7 +172,8 @@ namespace Blackjack_v1
                     {
                         playerSeat.IsStanding = true;
                     }
-                    if (playerSeat.Split != null)
+                    //if (playerSeat.Split != null)
+                    if(playerSeat.Split.Count > 0)
                     {
                         var specialAction2 = string.Empty;
                         if (playerSeat.Player.IsRequestingCard(playerSeat.Split,
@@ -198,6 +204,7 @@ namespace Blackjack_v1
             playerSeat.DealtCards.RemoveAt(0);
             playerSeat.Split.Add(playerSeat.DealtCards.First());
             playerSeat.IsStandingOnSplit = false;
+            playerSeat.LayDownBet(table.TableMinBet, table.TheCount, table.TotalNumberOfCardsDealt, true);
         }
 
         private void ResetStandingFlag()
@@ -224,7 +231,7 @@ namespace Blackjack_v1
             }
         }
 
-        private void SetBets(int minimumBet, int theCount)
+        private void SetBets(int minimumBet, int theCount, bool isForSplit)
         {
             if (table.PlayerSlots[0].ShouldCountBeReset(table.TotalNumberOfCardsDealt))
             {
@@ -232,9 +239,8 @@ namespace Blackjack_v1
             }
             var playersToRemove = new List<PlayerSlot>();
             foreach (var playerSeat in table.PlayerSlots)
-            {
-                
-                playerSeat.LayDownBet(minimumBet, theCount, table.TotalNumberOfCardsDealt);
+            {                
+                playerSeat.LayDownBet(minimumBet, theCount, table.TotalNumberOfCardsDealt, isForSplit);
                 if (playerSeat.BetAmount == 0)
                 {
                     playersToRemove.Add(playerSeat);
