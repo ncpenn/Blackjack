@@ -1,8 +1,8 @@
-﻿namespace Blackjack_v1
+﻿namespace Blackjack.Models
 {
     public class Card
     {
-        public Enums.Value Value { get; set; }
+        public int Value { get; set; }
         public Enums.Suit Suit { get; set; }
     }
 }

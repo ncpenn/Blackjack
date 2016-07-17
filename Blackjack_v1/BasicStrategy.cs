@@ -1,53 +1,48 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
+using Blackjack.Models;
 
-namespace Blackjack_v1
+namespace Blackjack
 {
     public static class BasicStrategy
     {
-        private static ReadOnlyCollection<int> notValidSplitValues = new ReadOnlyCollection<int>(
+        private static readonly ReadOnlyCollection<int> NotValidSplitValues = new ReadOnlyCollection<int>(
             new[] {
-                (int)Enums.Value.Five,
-                (int)Enums.Value.Ten,
-                (int)Enums.Value.Jack,
-                (int)Enums.Value.Queen,
-                (int)Enums.Value.King
+                5,
+                10,
+                11,
+                12,
+                13
             });
 
-        public static Enums.PlayAction DeterminePlayerNextPlay(List<int> cardValues, int dealerCardValue)
+        public static Enums.PlayAction DeterminePlayerNextPlay(int[] cardValues, int dealerCardValue, bool canSplit)
         {
             Enums.PlayAction result;
-            bool isSplit;
-            bool isSoft;
-
-            var handValue = DetermineHandValue(cardValues, out isSplit, out isSoft);
-
-            if (isSplit && !notValidSplitValues.Contains(cardValues.First()))
+            
+            var handValue = DetermineHandValue(cardValues);
+            handValue.IsSplit = handValue.IsSplit && canSplit;
+            if (handValue.IsSplit && !NotValidSplitValues.Contains(cardValues.First()))
             {
                 result = DoSplitRules(cardValues.First(), dealerCardValue);            
             }
-            else if (isSoft)
+            else if (handValue.IsSoft)
             {
-                result = DoSoftRules(handValue, dealerCardValue);
+                result = DoSoftRules(handValue.Value, dealerCardValue);
             }
             else
             {
-                isSplit = false;
-                result = DoHardRules(handValue, dealerCardValue);
+                result = DoHardRules(handValue.Value, dealerCardValue);
             }
             return result;      
         }
 
-        public static int DetermineHandValue(List<int> cards, out bool isSplit, out bool isSoft)
+        public static HandValue DetermineHandValue(int[] cards)
         {
-            var handValue = 0;
-            isSplit = false;
-            isSoft = false;
+            var handValue = new HandValue();
             int? keepAceTillLast = null;
-            if (cards.Count == 2 && cards.Distinct().ToArray().Length == 1)
+            if (cards.Length == 2 && cards.Distinct().Count() == 1)
             {
-                isSplit = true;
+                handValue.IsSplit = true;
             }
 
             foreach (var value in cards)
@@ -59,58 +54,26 @@ namespace Blackjack_v1
                 }
                 if (value >= 10)
                 {
-                    handValue += 10;
+                    handValue.Value += 10;
                 }
                 else
                 {
-                    handValue += value;
+                    handValue.Value += value;
                 }                
             }
 
             if (keepAceTillLast != null)
             {
-                if (handValue + 11 <= 21)
+                if (handValue.Value + 11 <= 21)
                 {
-                    if (handValue + 11 == 12 && isSplit)
-                        isSoft = false;
-                    else
-                        isSoft = true;
-                    return handValue + 11;
-                }
-                return handValue + 1;
-            }
-            return handValue;
-        }
-
-        public static int DetermineHandValue(List<int> cards)
-        {
-            var handValue = 0;
-            int? keepAceTillLast = null;
-
-            foreach (var value in cards)
-            {
-                if (value == 1 && keepAceTillLast == null)
-                {
-                    keepAceTillLast = 1;
-                    continue;
-                }
-                if (value >= 10)
-                {
-                    handValue += 10;
+                    if (handValue.Value + 11 == 12 && handValue.IsSplit) handValue.IsSoft = false;
+                    else handValue.IsSoft = true;
+                    handValue.Value += 11;
                 }
                 else
                 {
-                    handValue += value;
+                    handValue.Value += 1;
                 }
-            }
-
-            if (keepAceTillLast != null)
-            {
-                if (handValue + 11 <= 21)
-                {
-                    return handValue + 11;
-                }
-                return handValue + 1;
             }
             return handValue;
         }

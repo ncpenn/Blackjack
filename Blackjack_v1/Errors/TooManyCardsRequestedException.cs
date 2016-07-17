@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Blackjack_v1
+namespace Blackjack.Errors
 {
-    class TooManyCardsRequestedException : Exception
+    public class TooManyCardsRequestedException : Exception
     {
         public TooManyCardsRequestedException(string msg) : base(msg)
         {

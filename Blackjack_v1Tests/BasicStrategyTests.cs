@@ -1,132 +1,128 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Blackjack_v1;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Blackjack;
+using Blackjack.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Blackjack_v1.Tests
+namespace BlackjackTests
 {
-    [TestClass()]
+    [TestClass]
     public class BasicStrategyTests
     {
-        [TestMethod()]
-        public void DetermineHandValueTest()
+        [TestMethod]
+        public void DetermineHandValueTest_2to10Hard()
         {
-            //insure both methods return the same values
-            bool isSoft;
-            bool isSplit;
-            int expectedHandValue;
-            var listOfCardValues = new List<int> { 1, 1 };
-            while (listOfCardValues[0] != (int)Enums.Value.King)
+            //hard hand values from 2 pip to 10 pip
+           var listOfCardValues = new [] { 2, 2 };
+            while (listOfCardValues[0] != 10)
             {
-                while (listOfCardValues[1] != (int)Enums.Value.King)
+                while (listOfCardValues[1] != 10)
                 {
                     var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues);
-                    Assert.AreEqual(BasicStrategy.DetermineHandValue(listOfCardValues, out isSplit,out isSoft), handvalue);
+                    Assert.AreEqual(listOfCardValues.Sum(), handvalue.Value);
+                    Assert.IsFalse(handvalue.IsSoft);
                     listOfCardValues[1]++;
                 }
                 listOfCardValues[0]++;
             }
+        }
 
-            // hard hand values from 2 pip to 10 pip
-            listOfCardValues = new List<int> { 2, 2 };
-            while (listOfCardValues[0] != (int)Enums.Value.Ten)
+        [TestMethod]
+        public void DetermineHandValueTest_SoftHands()
+        {
+            var listOfCardValues = new[] { 1, 1 };
+            while (listOfCardValues[0] != 13)
             {
-                while (listOfCardValues[1] != (int)Enums.Value.Ten)
-                {
-                    var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues, out isSplit, out isSoft);
-                    Assert.AreEqual(listOfCardValues.Sum(), handvalue);
-                    Assert.IsFalse(isSoft);
-                    listOfCardValues[1]++;
-                }
-                listOfCardValues[0]++;
-            }
-
-            // soft hands
-            listOfCardValues = new List<int> { 1, 1 };
-            while (listOfCardValues[0] != (int)Enums.Value.King)
-            {
-                var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues, out isSplit , out isSoft);
-                expectedHandValue = listOfCardValues[0] < 10 ? 11 + listOfCardValues[0] : 21;
-                Assert.AreEqual(expectedHandValue, handvalue);
-                if(listOfCardValues[0] == 1 && listOfCardValues[1] == 1)
-                    Assert.IsFalse(isSoft);
+                var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues);
+                var expectedHandValue = listOfCardValues[0] < 10 ? 11 + listOfCardValues[0] : 21;
+                Assert.AreEqual(expectedHandValue, handvalue.Value);
+                if (listOfCardValues[0] == 1 && listOfCardValues[1] == 1)
+                    Assert.IsFalse(handvalue.IsSoft);
                 else
-                    Assert.IsTrue(isSoft);
+                    Assert.IsTrue(handvalue.IsSoft);
                 listOfCardValues[0]++;
             }
+        }
 
-            // hands with ten values
-            listOfCardValues = new List<int> { 10, 1 };
-            while (listOfCardValues[0] != (int)Enums.Value.King)
+        [TestMethod]
+        public void DetermineHandValueTest_10ValueHands()
+        {
+            var listOfCardValues = new [] { 10, 1 };
+            while (listOfCardValues[0] != 13)
             {
-                while (listOfCardValues[1] != (int)Enums.Value.King)
+                while (listOfCardValues[1] != 13)
                 {
                     var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues);
+                    int expectedHandValue;
                     if (listOfCardValues.Any(c => c == 1))
                         expectedHandValue = 21;
                     else if (listOfCardValues[1] > 10)
                         expectedHandValue = 20;
                     else
                         expectedHandValue = 10 + listOfCardValues[1];
-                    Assert.AreEqual(expectedHandValue, handvalue);
+                    Assert.AreEqual(expectedHandValue, handvalue.Value);
                     listOfCardValues[1]++;
                 }
                 listOfCardValues[0]++;
             }
+        }
 
-            // hands with splits
-            listOfCardValues = new List<int> { 1, 1 };
-            while (listOfCardValues[0] != (int)Enums.Value.King)
+        [TestMethod]
+        public void DetermineHandValueTests_Splits()
+        {
+            var listOfCardValues = new[]{ 1, 1 };
+            while (listOfCardValues[0] != 13)
             {
-                var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues, out isSplit, out isSoft);
+                var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues);
                 if (listOfCardValues.Any(c => c == 1))
                 {
-                    Assert.AreEqual(12, handvalue);
-                    Assert.IsFalse(isSoft);
-                    Assert.IsTrue(isSplit);
+                    Assert.AreEqual(12, handvalue.Value);
+                    Assert.IsFalse(handvalue.IsSoft);
+                    Assert.IsTrue(handvalue.IsSplit);
                 }
                 else if (listOfCardValues[1] > 10)
                 {
-                    Assert.AreEqual(20, handvalue);
-                    Assert.IsTrue(isSplit);
-                    Assert.IsFalse(isSoft);
+                    Assert.AreEqual(20, handvalue.Value);
+                    Assert.IsTrue(handvalue.IsSplit);
+                    Assert.IsFalse(handvalue.IsSoft);
                 }
                 else
                 {
-                    Assert.AreEqual(listOfCardValues[0] * 2, handvalue);
-                    Assert.IsTrue(isSplit);
-                    Assert.IsFalse(isSoft);
-                }                
+                    Assert.AreEqual(listOfCardValues[0] * 2, handvalue.Value);
+                    Assert.IsTrue(handvalue.IsSplit);
+                    Assert.IsFalse(handvalue.IsSoft);
+                }
                 listOfCardValues[1]++;
                 listOfCardValues[0]++;
             }
+        }
 
-            listOfCardValues = new List<int>
+        [TestMethod]
+        public void DetermineHandValueTests_RandomTests()
+        {
+            var listOfCardValues = new []
             {
                 1,
                 1,
                 1,
             };
 
-            var handValue = BasicStrategy.DetermineHandValue(listOfCardValues, out isSplit, out isSoft);
-            Assert.AreEqual(13, handValue);   
-            Assert.IsTrue(!isSplit && isSoft);
+            var handValue = BasicStrategy.DetermineHandValue(listOfCardValues);
+            Assert.AreEqual(13, handValue.Value);
+            Assert.IsTrue(!handValue.IsSplit && handValue.IsSoft);
 
-            listOfCardValues = new List<int>
+            listOfCardValues = new []
             {
                 13,
                 2,
                 1,
             };
 
-            handValue = BasicStrategy.DetermineHandValue(listOfCardValues, out isSplit, out isSoft);
-            Assert.AreEqual(13, handValue);
-            Assert.IsTrue(!isSplit && !isSoft);
+            handValue = BasicStrategy.DetermineHandValue(listOfCardValues);
+            Assert.AreEqual(13, handValue.Value);
+            Assert.IsTrue(!handValue.IsSplit && !handValue.IsSoft);
 
-            listOfCardValues = new List<int>
+            listOfCardValues = new []
             {
                 11,
                 1,
@@ -134,33 +130,32 @@ namespace Blackjack_v1.Tests
                 1
             };
 
-            handValue = BasicStrategy.DetermineHandValue(listOfCardValues, out isSplit, out isSoft);
-            Assert.AreEqual(13, handValue);
-            Assert.IsTrue(!isSplit && !isSoft);
+            handValue = BasicStrategy.DetermineHandValue(listOfCardValues);
+            Assert.AreEqual(13, handValue.Value);
+            Assert.IsTrue(!handValue.IsSplit && !handValue.IsSoft);
 
-            listOfCardValues = new List<int>
+            listOfCardValues = new []
             {
                 12,
                 9,
                 8
             };
 
-            handValue = BasicStrategy.DetermineHandValue(listOfCardValues, out isSplit, out isSoft);
-            Assert.AreEqual(27, handValue);
-            Assert.IsTrue(!isSplit && !isSoft);
+            handValue = BasicStrategy.DetermineHandValue(listOfCardValues);
+            Assert.AreEqual(27, handValue.Value);
+            Assert.IsTrue(!handValue.IsSplit && !handValue.IsSoft);
         }
 
         [TestMethod]
-        public void DeterminePlayerNextPlay()
+        public void DetermineNPlayerNextPlay_Splits()
         {
-            //testing splits      
             var dcard = 1;
             var pcard1 = 1;
-            while (dcard <= (int)Enums.Value.King)
+            while (dcard <= 13)
             {
-                while (pcard1 <= (int)Enums.Value.King)
+                while (pcard1 <= 13)
                 {
-                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(new List<int> { pcard1 , pcard1 }, dcard);
+                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(new[] { pcard1, pcard1 }, dcard, true);
                     if (pcard1 == 1 ||
                         pcard1 == 8 ||
                         (pcard1 == 9 && dcard != 1 && dcard != 7 && dcard < 10) ||
@@ -188,21 +183,64 @@ namespace Blackjack_v1.Tests
                             Assert.AreNotEqual(Enums.PlayAction.Split, nextPlayerAction);
                         else
                             Assert.Fail("a split card condition was not accounted for");
-                    }                 
+                    }
                     pcard1++;
                 }
                 dcard++;
             }
 
-            //testing hard hands
             dcard = 1;
+            pcard1 = 1;
+            while (dcard <= 13)
+            {
+                while (pcard1 <= 13)
+                {
+                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(new[] { pcard1, pcard1 }, dcard, false);
+                    if (pcard1 == 1 ||
+                        pcard1 == 8 ||
+                        (pcard1 == 9 && dcard != 1 && dcard != 7 && dcard < 10) ||
+                        (pcard1 == 7 && dcard != 1 && dcard <= 7) ||
+                        (pcard1 == 6 && (dcard >= 2 && dcard <= 6)) ||
+                        ((pcard1 == 3 || pcard1 == 4) && (dcard >= 4 && dcard <= 7)))
+                    {
+                        Assert.AreNotEqual(Enums.PlayAction.Split, nextPlayerAction);
+                    }
+                    else if (pcard1 == 9 &&
+                      dcard == 1 || dcard == 7 || dcard >= 10)
+                    {
+                        Assert.AreEqual(Enums.PlayAction.Stand, nextPlayerAction);
+                    }
+                    else if ((pcard1 == 7 && (dcard == 1 || dcard >= 8)) ||
+                      (pcard1 == 6 && (dcard <= 2 || dcard >= 7)) ||
+                      (pcard1 == 4) ||
+                      ((pcard1 == 3 || pcard1 == 2) && (dcard <= 3 || dcard >= 8)))
+                    {
+                        Assert.AreEqual(Enums.PlayAction.Hit, nextPlayerAction);
+                    }
+                    else
+                    {
+                        if (pcard1 == 5 || pcard1 >= 10)
+                            Assert.AreNotEqual(Enums.PlayAction.Split, nextPlayerAction);
+                        else
+                            Assert.Fail("a split card condition was not accounted for");
+                    }
+                    pcard1++;
+                }
+                dcard++;
+            }
+        }
+
+        [TestMethod]
+        public void DeterminePlayerNextPlay_HardHands()
+        {
+            var dcard = 1;
             var playerHandTotal = 5;
-            while (dcard <= (int)Enums.Value.King)
+            while (dcard <= 13)
             {
                 while (playerHandTotal <= 21)
                 {
                     var listOfCardValues = CardValueCreator("hard", playerHandTotal);
-                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(listOfCardValues, dcard);
+                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(listOfCardValues, dcard, true);
                     if (playerHandTotal <= 8 ||
                         (playerHandTotal == 9 && (dcard <= 2 || dcard >= 7)) ||
                         (playerHandTotal == 10 && (dcard == 1 || dcard >= 10)) ||
@@ -233,16 +271,19 @@ namespace Blackjack_v1.Tests
                 }
                 dcard++;
             }
+        }
 
-            //testing soft hands
-            dcard = 1;
-            playerHandTotal = 13;
-            while (dcard <= (int)Enums.Value.King)
+        [TestMethod]
+        public void DeterminePlayerNextPlay_SoftHands()
+        {
+           var dcard = 1;
+           var playerHandTotal = 13;
+            while (dcard <= 13)
             {
                 while (playerHandTotal <= 21)
                 {
                     var listOfCardValues = CardValueCreator("soft", playerHandTotal);
-                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(listOfCardValues, dcard);
+                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(listOfCardValues, dcard, true);
 
                     if (((playerHandTotal == 13 || playerHandTotal == 14) && (dcard <= 4 || dcard >= 7)) ||
                         ((playerHandTotal == 15 || playerHandTotal == 16) && (dcard <= 3 || dcard >= 7)) ||
@@ -272,22 +313,22 @@ namespace Blackjack_v1.Tests
             }
         }
 
-        private List<int> CardValueCreator(string typeOfHand, int handTotal)
+        private int[] CardValueCreator(string typeOfHand, int handTotal)
         {
             if (typeOfHand == "hard")
             {
                 if (handTotal % 2 == 0)
                 {
-                    return new List<int> { handTotal / 2 - 1, handTotal / 2 + 1 };
+                    return new [] { handTotal / 2 - 1, handTotal / 2 + 1 };
                 }
                 else
                 {
-                    return new List<int> { handTotal / 2, handTotal - (handTotal / 2) };
+                    return new [] { handTotal / 2, handTotal - (handTotal / 2) };
                 }
             }
             if (typeOfHand == "soft")
             {
-                return new List<int> { 1, handTotal - 11 };
+                return new [] { 1, handTotal - 11 };
             }
             Assert.Fail("error in CardValueCreator method");
             return null;

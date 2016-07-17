@@ -1,22 +1,22 @@
-﻿namespace Blackjack_v1
+﻿namespace Blackjack.Models
 {
     public class Percent
     {
-        public readonly int PercentValue;
+        public readonly double PercentValue;
 
-        public Percent(int percent)
+        public Percent(int percentAsWholeNumber)
         {
-            if (percent > 100)
+            if (percentAsWholeNumber > 100)
             {
-                PercentValue = 100;
+                PercentValue = 1;
             }
-            else if (percent < 0)
+            else if (percentAsWholeNumber < 0)
             {
                 PercentValue = 0;
             }
             else
             {
-                PercentValue = percent;
+                PercentValue = (double) percentAsWholeNumber / 100;
             }
         }
     }
