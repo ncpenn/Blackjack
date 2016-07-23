@@ -16,9 +16,9 @@ namespace Blackjack.Models
         {
             if (e?.NewItems != null)
             {
-                foreach (Card card in e.NewItems)
+                foreach (uint card in e.NewItems)
                 {
-                    CurrentCount += CardHelper.GetCountValueForCard(card.Value);
+                    CurrentCount += CardHelper.GetCountValueForCard(card);
                 }
             }
         }

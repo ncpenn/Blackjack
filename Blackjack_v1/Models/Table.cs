@@ -4,14 +4,14 @@ namespace Blackjack.Models
 {
     public static class Table
     {
-        public static Card DealersUpCard { get; set; }
+        public static uint DealersUpCard { get; set; }
         public static int TableMinBet { get; set; }
         public static int TableMaxBet { get; set; }
-        public static ObservableCollection<Card> VisibleCards { get; }
+        public static ObservableCollection<uint> VisibleCards { get; }
 
         static Table()
         {
-            VisibleCards = new ObservableCollection<Card>();
+            VisibleCards = new ObservableCollection<uint>();
         }
     }
 }

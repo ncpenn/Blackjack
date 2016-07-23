@@ -10,11 +10,11 @@ namespace BlackjackTests
         [TestMethod]
         public void BlackJackTests()
         {
-            for (var card1 = 1; card1 <= 13; card1++)
+            for (uint card1 = 1; card1 <= 13; card1++)
             {
-                for (var card2 = 1; card2 < 13; card2++)
+                for (uint card2 = 1; card2 < 13; card2++)
                 {
-                    var isBlackjack = CardHelper.IsBlackJack(new Card {Value = card1}, new Card {Value = card2});
+                    var isBlackjack = CardHelper.IsBlackJack(card1, card2);
                     if (card1 == 1 && card2 >= 10 || card2 == 1 && card1 >= 10)
                     {
                         Assert.IsTrue(isBlackjack);
@@ -30,7 +30,7 @@ namespace BlackjackTests
         [TestMethod]
         public void GetCountValuesTests()
         {
-            for (var card = 1; card <= 13; card++)
+            for (uint card = 1; card <= 13; card++)
             {
                 var count = CardHelper.GetCountValueForCard(card);
                 if (card == 1)

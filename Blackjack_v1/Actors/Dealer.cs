@@ -8,11 +8,11 @@ namespace Blackjack.Actors
     public class Dealer
     {
         private readonly int _numberOfRounds;
-        private readonly List<Card> _dealersCards;
+        private readonly List<uint> _dealersCards;
         private readonly List<Player> _players;
         private readonly Shoe _shoe;
         private bool _isCurrentDealerHandBlackJack;
-        private int _dealerHandValue;
+        private uint _dealerHandValue;
 
         public Dealer(List<Player> players, int numberOfRounds, int numberOfDecksToBeUsed, int tableMinBet, int tableMaxBet, Percent whenToShuffle)
         {
@@ -21,7 +21,7 @@ namespace Blackjack.Actors
             Table.TableMinBet = tableMinBet;
             _players = players;
             _numberOfRounds = numberOfRounds;
-            _dealersCards = new List<Card>();
+            _dealersCards = new List<uint>();
             TheCount.CurrentCount = 0;
         }
 
@@ -43,7 +43,7 @@ namespace Blackjack.Actors
         private void SetUpTableForRound()
         {
             Table.VisibleCards.Clear();
-            Table.DealersUpCard = null;
+            Table.DealersUpCard = 0;
         }
 
         private void SettleBets()
@@ -154,14 +154,14 @@ namespace Blackjack.Actors
             _isCurrentDealerHandBlackJack = CardHelper.IsBlackJack(_dealersCards[0], _dealersCards[1]);
             if (!_isCurrentDealerHandBlackJack)
             {
-                _dealerHandValue = BasicStrategy.DetermineHandValue(_dealersCards.Select(card => card.Value).ToArray()).Value;
+                _dealerHandValue = BasicStrategy.DetermineHandValue(_dealersCards.ToArray()).Value;
                 Table.VisibleCards.Add(Table.DealersUpCard);
                 while (_dealerHandValue < 17)
                 {
                     var card = _shoe.GiveMeSomeCards(1)[0];
                     Table.VisibleCards.Add(card);
                     _dealersCards.Add(card);
-                    _dealerHandValue = BasicStrategy.DetermineHandValue(_dealersCards.Select(c => c.Value).ToArray()).Value;
+                    _dealerHandValue = BasicStrategy.DetermineHandValue(_dealersCards.ToArray()).Value;
                 }
             }
         }

@@ -13,13 +13,13 @@ namespace BlackjackTests
         public void DetermineHandValueTest_2to10Hard()
         {
             //hard hand values from 2 pip to 10 pip
-           var listOfCardValues = new [] { 2, 2 };
+           var listOfCardValues = new uint[] { 2, 2 };
             while (listOfCardValues[0] != 10)
             {
                 while (listOfCardValues[1] != 10)
                 {
                     var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues);
-                    Assert.AreEqual(listOfCardValues.Sum(), handvalue.Value);
+                    Assert.AreEqual(listOfCardValues.Aggregate((a, b) => a + b), handvalue.Value);
                     Assert.IsFalse(handvalue.IsSoft);
                     listOfCardValues[1]++;
                 }
@@ -30,7 +30,7 @@ namespace BlackjackTests
         [TestMethod]
         public void DetermineHandValueTest_SoftHands()
         {
-            var listOfCardValues = new[] { 1, 1 };
+            var listOfCardValues = new uint[] { 1, 1 };
             while (listOfCardValues[0] != 13)
             {
                 var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues);
@@ -47,13 +47,13 @@ namespace BlackjackTests
         [TestMethod]
         public void DetermineHandValueTest_10ValueHands()
         {
-            var listOfCardValues = new [] { 10, 1 };
+            var listOfCardValues = new uint[] { 10, 1 };
             while (listOfCardValues[0] != 13)
             {
                 while (listOfCardValues[1] != 13)
                 {
                     var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues);
-                    int expectedHandValue;
+                    uint expectedHandValue;
                     if (listOfCardValues.Any(c => c == 1))
                         expectedHandValue = 21;
                     else if (listOfCardValues[1] > 10)
@@ -70,19 +70,19 @@ namespace BlackjackTests
         [TestMethod]
         public void DetermineHandValueTests_Splits()
         {
-            var listOfCardValues = new[]{ 1, 1 };
+            var listOfCardValues = new uint[]{ 1, 1 };
             while (listOfCardValues[0] != 13)
             {
                 var handvalue = BasicStrategy.DetermineHandValue(listOfCardValues);
                 if (listOfCardValues.Any(c => c == 1))
                 {
-                    Assert.AreEqual(12, handvalue.Value);
+                    Assert.AreEqual((uint)12, handvalue.Value);
                     Assert.IsFalse(handvalue.IsSoft);
                     Assert.IsTrue(handvalue.IsSplit);
                 }
                 else if (listOfCardValues[1] > 10)
                 {
-                    Assert.AreEqual(20, handvalue.Value);
+                    Assert.AreEqual((uint)20, handvalue.Value);
                     Assert.IsTrue(handvalue.IsSplit);
                     Assert.IsFalse(handvalue.IsSoft);
                 }
@@ -100,7 +100,7 @@ namespace BlackjackTests
         [TestMethod]
         public void DetermineHandValueTests_RandomTests()
         {
-            var listOfCardValues = new []
+            var listOfCardValues = new uint[]
             {
                 1,
                 1,
@@ -108,10 +108,10 @@ namespace BlackjackTests
             };
 
             var handValue = BasicStrategy.DetermineHandValue(listOfCardValues);
-            Assert.AreEqual(13, handValue.Value);
+            Assert.AreEqual((uint)13, handValue.Value);
             Assert.IsTrue(!handValue.IsSplit && handValue.IsSoft);
 
-            listOfCardValues = new []
+            listOfCardValues = new uint[]
             {
                 13,
                 2,
@@ -119,10 +119,10 @@ namespace BlackjackTests
             };
 
             handValue = BasicStrategy.DetermineHandValue(listOfCardValues);
-            Assert.AreEqual(13, handValue.Value);
+            Assert.AreEqual((uint)13, handValue.Value);
             Assert.IsTrue(!handValue.IsSplit && !handValue.IsSoft);
 
-            listOfCardValues = new []
+            listOfCardValues = new uint []
             {
                 11,
                 1,
@@ -131,10 +131,10 @@ namespace BlackjackTests
             };
 
             handValue = BasicStrategy.DetermineHandValue(listOfCardValues);
-            Assert.AreEqual(13, handValue.Value);
+            Assert.AreEqual((uint)13, handValue.Value);
             Assert.IsTrue(!handValue.IsSplit && !handValue.IsSoft);
 
-            listOfCardValues = new []
+            listOfCardValues = new uint[]
             {
                 12,
                 9,
@@ -142,20 +142,20 @@ namespace BlackjackTests
             };
 
             handValue = BasicStrategy.DetermineHandValue(listOfCardValues);
-            Assert.AreEqual(27, handValue.Value);
+            Assert.AreEqual((uint)27, handValue.Value);
             Assert.IsTrue(!handValue.IsSplit && !handValue.IsSoft);
         }
 
         [TestMethod]
         public void DetermineNPlayerNextPlay_Splits()
         {
-            var dcard = 1;
-            var pcard1 = 1;
+            uint dcard = 1;
+            uint pcard1 = 1;
             while (dcard <= 13)
             {
                 while (pcard1 <= 13)
                 {
-                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(new[] { pcard1, pcard1 }, dcard, true);
+                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(new uint[] { pcard1, pcard1 }, dcard, true);
                     if (pcard1 == 1 ||
                         pcard1 == 8 ||
                         (pcard1 == 9 && dcard != 1 && dcard != 7 && dcard < 10) ||
@@ -195,7 +195,7 @@ namespace BlackjackTests
             {
                 while (pcard1 <= 13)
                 {
-                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(new[] { pcard1, pcard1 }, dcard, false);
+                    var nextPlayerAction = BasicStrategy.DeterminePlayerNextPlay(new uint[] { pcard1, pcard1 }, dcard, false);
                     if (pcard1 == 1 ||
                         pcard1 == 8 ||
                         (pcard1 == 9 && dcard != 1 && dcard != 7 && dcard < 10) ||
@@ -233,10 +233,10 @@ namespace BlackjackTests
         [TestMethod]
         public void DeterminePlayerNextPlay_HardHands()
         {
-            var dcard = 1;
-            var playerHandTotal = 5;
+            uint dcard = 1;
             while (dcard <= 13)
             {
+                uint playerHandTotal = 5;
                 while (playerHandTotal <= 21)
                 {
                     var listOfCardValues = CardValueCreator("hard", playerHandTotal);
@@ -276,10 +276,10 @@ namespace BlackjackTests
         [TestMethod]
         public void DeterminePlayerNextPlay_SoftHands()
         {
-           var dcard = 1;
-           var playerHandTotal = 13;
+            uint dcard = 1; 
             while (dcard <= 13)
             {
+                uint playerHandTotal = 13;
                 while (playerHandTotal <= 21)
                 {
                     var listOfCardValues = CardValueCreator("soft", playerHandTotal);
@@ -313,22 +313,22 @@ namespace BlackjackTests
             }
         }
 
-        private int[] CardValueCreator(string typeOfHand, int handTotal)
+        private uint[] CardValueCreator(string typeOfHand, uint handTotal)
         {
             if (typeOfHand == "hard")
             {
                 if (handTotal % 2 == 0)
                 {
-                    return new [] { handTotal / 2 - 1, handTotal / 2 + 1 };
+                    return new uint[] { handTotal / 2 - 1, handTotal / 2 + 1 };
                 }
                 else
                 {
-                    return new [] { handTotal / 2, handTotal - (handTotal / 2) };
+                    return new uint[] { handTotal / 2, handTotal - (handTotal / 2) };
                 }
             }
             if (typeOfHand == "soft")
             {
-                return new [] { 1, handTotal - 11 };
+                return new uint[] { 1, handTotal - 11 };
             }
             Assert.Fail("error in CardValueCreator method");
             return null;

@@ -4,13 +4,13 @@ namespace Blackjack.Helpers
 {
     public static class CardHelper
     {
-        public static bool IsBlackJack(Card card1, Card card2)
+        public static bool IsBlackJack(uint card1, uint card2)
         {
-            return (card1.Value == 1 && card2.Value >= 10) ||
-                   (card2.Value == 1 && card1.Value >= 10);
+            return (card1 == 1 && card2 >= 10) ||
+                   (card2 == 1 && card1 >= 10);
         }
 
-        public static int GetCountValueForCard(int cardValue)
+        public static int GetCountValueForCard(uint cardValue)
         {
             if (cardValue == 5)
             {

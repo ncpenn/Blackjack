@@ -6,8 +6,8 @@ namespace Blackjack
 {
     public static class BasicStrategy
     {
-        private static readonly ReadOnlyCollection<int> NotValidSplitValues = new ReadOnlyCollection<int>(
-            new[] {
+        private static readonly ReadOnlyCollection<uint> NotValidSplitValues = new ReadOnlyCollection<uint>(
+            new uint[] {
                 5,
                 10,
                 11,
@@ -15,7 +15,7 @@ namespace Blackjack
                 13
             });
 
-        public static Enums.PlayAction DeterminePlayerNextPlay(int[] cardValues, int dealerCardValue, bool canSplit)
+        public static Enums.PlayAction DeterminePlayerNextPlay(uint[] cardValues, uint dealerCardValue, bool canSplit)
         {
             Enums.PlayAction result;
             
@@ -36,7 +36,7 @@ namespace Blackjack
             return result;      
         }
 
-        public static HandValue DetermineHandValue(int[] cards)
+        public static HandValue DetermineHandValue(uint[] cards)
         {
             var handValue = new HandValue();
             int? keepAceTillLast = null;
@@ -78,7 +78,7 @@ namespace Blackjack
             return handValue;
         }
 
-        private static Enums.PlayAction DoSoftRules(int handValue, int dealerHandValue)
+        private static Enums.PlayAction DoSoftRules(uint handValue, uint dealerHandValue)
         {
             var result = Enums.PlayAction.Hit;
             if (handValue >= 19)
@@ -139,7 +139,7 @@ namespace Blackjack
             return result;
         }
 
-        private static Enums.PlayAction DoHardRules(int handValue, int dealerHandValue)
+        private static Enums.PlayAction DoHardRules(uint handValue, uint dealerHandValue)
         {
             var result = Enums.PlayAction.Hit;
 
@@ -209,7 +209,7 @@ namespace Blackjack
             return result;
         }
 
-        private static Enums.PlayAction DoSplitRules(int cardValue, int dealerCardValue)
+        private static Enums.PlayAction DoSplitRules(uint cardValue, uint dealerCardValue)
         {
             var result = Enums.PlayAction.Hit;
             if (cardValue == 1 || cardValue == 8) result = Enums.PlayAction.Split;

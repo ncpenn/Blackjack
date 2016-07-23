@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="BasicStrategy.cs" />
     <Compile Include="Helpers\CardHelper.cs" />
-    <Compile Include="Models\Card.cs" />
     <Compile Include="Actors\Dealer.cs" />
     <Compile Include="Actors\Deck.cs" />
     <Compile Include="Models\Enums.cs" />

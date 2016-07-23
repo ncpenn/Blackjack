@@ -2,7 +2,7 @@
 {
     public class PlayerHand
     {
-        public int HandTotal { get; set; }
+        public uint HandTotal { get; set; }
         public bool IsBlackJack { get; set; }
     }
 }

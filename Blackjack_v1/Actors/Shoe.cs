@@ -9,7 +9,7 @@ namespace Blackjack.Actors
     {
         private readonly Percent _whenToShuffle;
         private readonly int _numberOfDecksInShoe;
-        private List<Card> _loadedShoe;
+        private List<uint> _loadedShoe;
         private readonly int _initialCountOfCardsInShoe;
         public bool NeedsToBeShuffled { get; private set; }
 
@@ -22,9 +22,9 @@ namespace Blackjack.Actors
             LoadShoe();
         }
 
-        public Card[] GiveMeSomeCards(int numberOfCardsRequested)
+        public uint[] GiveMeSomeCards(int numberOfCardsRequested)
         {
-            var requestedCards = new Card[numberOfCardsRequested];
+            var requestedCards = new uint[numberOfCardsRequested];
             if (numberOfCardsRequested <= _loadedShoe.Count)
             {
                 for (var i = 0; i < numberOfCardsRequested; i++)
@@ -53,7 +53,7 @@ namespace Blackjack.Actors
 
         private void LoadShoe()
         {
-            _loadedShoe = new List<Card>();
+            _loadedShoe = new List<uint>();
 
             for (var i = 0; i < _numberOfDecksInShoe; i++)
             {
@@ -67,7 +67,7 @@ namespace Blackjack.Actors
         {
             for (var i = 0; i < numberOfTimesToShuffle; i++)
             {
-                var tempShoe = new Card[_initialCountOfCardsInShoe];
+                var tempShoe = new uint[_initialCountOfCardsInShoe];
                 var listOfOccupiedLocationsInShoe = new HashSet<int>();
 
                 var random = new Random();
