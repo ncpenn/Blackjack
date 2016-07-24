@@ -13,6 +13,8 @@ namespace Blackjack.Actors
         private List<uint> _loadedShoe;
         private readonly int _initialCountOfCardsInShoe;
         public bool NeedsToBeShuffled { get; private set; }
+        public delegate void TimeToShuffle();
+        public event TimeToShuffle AnnounceTimeToShuffle;
 
         public Shoe(int numberOfDecks, Percent whenToShuffle)
         {
@@ -34,7 +36,10 @@ namespace Blackjack.Actors
                     requestedCards[i] = card;
                     _loadedShoe.RemoveAt(0);
                 }
-                NeedsToBeShuffled = IsTimeToShuffle();
+                if (IsTimeToShuffle())
+                {
+                    AnnounceTimeToShuffle?.Invoke();
+                }
                 return requestedCards;
             }
             throw new TooManyCardsRequestedException("Cards requested exceeds cards available");

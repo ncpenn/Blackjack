@@ -13,5 +13,6 @@ namespace Blackjack.Interfaces
         void AddCardToVisibleCards(IEnumerable<uint> cards);
         void SetBetLimits(uint minBet, uint maxBet);
         void DealtCard_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e);
+        void ResetCount();
     }
 }

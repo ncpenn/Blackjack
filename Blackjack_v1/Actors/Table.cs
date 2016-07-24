@@ -56,5 +56,10 @@ namespace Blackjack.Actors
                 }
             }
         }
+
+        public void ResetCount()
+        {
+            CurrentCount = 0;
+        }
     }
 }

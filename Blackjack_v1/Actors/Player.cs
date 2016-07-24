@@ -12,6 +12,9 @@ namespace Blackjack.Actors
         private readonly bool _isCardCounter;
         public bool IsCurrentHandBlackjack { get; private set; }
         public decimal BankRoll { get; private set; }
+        public uint MainBet { get; set; }
+        public List<uint> MainHand { get; }
+        public List<uint> SplitHand { get; set; }
         private decimal _currentBet;
         private decimal _splitBet;
         private readonly List<uint> _splitHand;
@@ -53,6 +56,16 @@ namespace Blackjack.Actors
             {
                 BankRoll -= _currentBet;
             }
+        }
+
+        public void SetMainBet(uint bet)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetSplitBet(uint bet)
+        {
+            throw new NotImplementedException();
         }
 
         public Enums.PlayAction Turn(uint card, bool placeBetThisTurn, uint dealersVisibleCard)

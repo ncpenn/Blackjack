@@ -25,6 +25,7 @@ namespace Blackjack.Actors.Actions
                     while (playAction != Enums.PlayAction.Stand)
                     {
                         var card = collection.Shoe.GiveMeSomeCards(1)[0];
+                        collection.Table.AddCardToVisibleCards(card);
                         player.MainHand.Add(card);
                         playAction = collection.BasicStrategu.DeterminePlayerNextPlay(player.MainHand, collection.Dealer.DealerUpCard,
                             !player.SplitHand.Any());
@@ -34,6 +35,7 @@ namespace Blackjack.Actors.Actions
                     {
                         var card = collection.Shoe.GiveMeSomeCards(1)[0];
                         player.SplitHand.Add(card);
+                        collection.Table.AddCardToVisibleCards(card);
                         playAction = collection.BasicStrategu.DeterminePlayerNextPlay(player.SplitHand, collection.Dealer.DealerUpCard,
                             !player.SplitHand.Any());
                     }
