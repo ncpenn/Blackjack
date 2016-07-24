@@ -1,16 +1,16 @@
-﻿using Blackjack.Models;
+﻿using Blackjack.Interfaces;
 
 namespace Blackjack.Helpers
 {
-    public static class CardHelper
+    public class CardHelper : ICardHelper
     {
-        public static bool IsBlackJack(uint card1, uint card2)
+        public bool IsBlackJack(uint card1, uint card2)
         {
             return (card1 == 1 && card2 >= 10) ||
                    (card2 == 1 && card1 >= 10);
         }
 
-        public static int GetCountValueForCard(uint cardValue)
+        public int GetCountValueForCard(uint cardValue)
         {
             if (cardValue == 5)
             {

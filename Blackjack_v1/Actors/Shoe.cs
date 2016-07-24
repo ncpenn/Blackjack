@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Blackjack.Errors;
+using Blackjack.Interfaces;
 using Blackjack.Models;
 
 namespace Blackjack.Actors
 {
-    public class Shoe
+    public class Shoe : IShoe
     {
         private readonly Percent _whenToShuffle;
         private readonly int _numberOfDecksInShoe;

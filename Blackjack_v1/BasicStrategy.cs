@@ -1,10 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using Blackjack.Interfaces;
 using Blackjack.Models;
 
 namespace Blackjack
 {
-    public static class BasicStrategy
+    public class BasicStrategy : IBasicStrategy
     {
         private static readonly ReadOnlyCollection<uint> NotValidSplitValues = new ReadOnlyCollection<uint>(
             new uint[] {
@@ -15,13 +17,13 @@ namespace Blackjack
                 13
             });
 
-        public static Enums.PlayAction DeterminePlayerNextPlay(uint[] cardValues, uint dealerCardValue, bool canSplit)
+        public Enums.PlayAction DeterminePlayerNextPlay(List<uint> cardValues, uint dealerCardValue, bool canSplit)
         {
             Enums.PlayAction result;
             
             var handValue = DetermineHandValue(cardValues);
             handValue.IsSplit = handValue.IsSplit && canSplit;
-            if (handValue.IsSplit && !NotValidSplitValues.Contains(cardValues.First()))
+            if (handValue.IsSplit)
             {
                 result = DoSplitRules(cardValues.First(), dealerCardValue);            
             }
@@ -36,11 +38,11 @@ namespace Blackjack
             return result;      
         }
 
-        public static HandValue DetermineHandValue(uint[] cards)
+        public HandValue DetermineHandValue(List<uint> cards)
         {
             var handValue = new HandValue();
             int? keepAceTillLast = null;
-            if (cards.Length == 2 && cards.Distinct().Count() == 1)
+            if (cards.Count() == 2 && cards.Distinct().Count() == 1 && !NotValidSplitValues.Contains(cards.First()))
             {
                 handValue.IsSplit = true;
             }
@@ -78,7 +80,7 @@ namespace Blackjack
             return handValue;
         }
 
-        private static Enums.PlayAction DoSoftRules(uint handValue, uint dealerHandValue)
+        private Enums.PlayAction DoSoftRules(uint handValue, uint dealerHandValue)
         {
             var result = Enums.PlayAction.Hit;
             if (handValue >= 19)
@@ -139,7 +141,7 @@ namespace Blackjack
             return result;
         }
 
-        private static Enums.PlayAction DoHardRules(uint handValue, uint dealerHandValue)
+        private Enums.PlayAction DoHardRules(uint handValue, uint dealerHandValue)
         {
             var result = Enums.PlayAction.Hit;
 
@@ -209,7 +211,7 @@ namespace Blackjack
             return result;
         }
 
-        private static Enums.PlayAction DoSplitRules(uint cardValue, uint dealerCardValue)
+        private Enums.PlayAction DoSplitRules(uint cardValue, uint dealerCardValue)
         {
             var result = Enums.PlayAction.Hit;
             if (cardValue == 1 || cardValue == 8) result = Enums.PlayAction.Split;
@@ -240,7 +242,7 @@ namespace Blackjack
 
             if (cardValue == 6)
             {
-                if (dealerCardValue >= 3 && dealerCardValue <= 6)
+                if (dealerCardValue >= 2 && dealerCardValue <= 6)
                 {
                     result = Enums.PlayAction.Split;
                 }
@@ -257,7 +259,7 @@ namespace Blackjack
 
             if (cardValue == 2 || cardValue == 3)
             {
-                if (dealerCardValue >= 4 && dealerCardValue <= 7)
+                if (dealerCardValue >= 2 && dealerCardValue <= 7)
                 {
                     result = Enums.PlayAction.Split;
                 }

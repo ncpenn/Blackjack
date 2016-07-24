@@ -12,13 +12,13 @@ namespace Console
     {
         static void Main(string[] args)
         {
-            var players = new List<Player>
-            {
-                new Player(5000, true),
-                new Player(5000, false)
-            };
-            var dealer = new Dealer(players, 100000, 8, 5, 500, new Percent(25));
-            dealer.PlayGame();
+            //var players = new List<Player>
+            //{
+            //    new Player(5000, true),
+            //    new Player(5000, false)
+            //};
+            //var dealer = new Dealer(players, 100000, 8, 5, 500, new Percent(25));
+            //dealer.PlayGame();
 
 
             //add "report" for final numbers of card counting

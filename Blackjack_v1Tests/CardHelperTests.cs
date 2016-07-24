@@ -6,7 +6,9 @@ namespace BlackjackTests
 {
     [TestClass]
     public class CardHelperTests
-    {
+    {   
+        private readonly CardHelper _cardHelper = new CardHelper();
+
         [TestMethod]
         public void BlackJackTests()
         {
@@ -14,7 +16,7 @@ namespace BlackjackTests
             {
                 for (uint card2 = 1; card2 < 13; card2++)
                 {
-                    var isBlackjack = CardHelper.IsBlackJack(card1, card2);
+                    var isBlackjack = _cardHelper.IsBlackJack(card1, card2);
                     if (card1 == 1 && card2 >= 10 || card2 == 1 && card1 >= 10)
                     {
                         Assert.IsTrue(isBlackjack);
@@ -32,7 +34,7 @@ namespace BlackjackTests
         {
             for (uint card = 1; card <= 13; card++)
             {
-                var count = CardHelper.GetCountValueForCard(card);
+                var count = _cardHelper.GetCountValueForCard(card);
                 if (card == 1)
                 {
                     Assert.AreEqual(-1, count);
