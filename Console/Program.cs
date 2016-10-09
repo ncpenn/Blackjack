@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Blackjack.Contracts;
+using Blackjack.Engine.Game;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Blackjack.Actors;
-using Blackjack.Models;
+using System.Threading;
 
 namespace Console
 {
@@ -12,16 +9,9 @@ namespace Console
     {
         static void Main(string[] args)
         {
-            //var players = new List<Player>
-            //{
-            //    new Player(5000, true),
-            //    new Player(5000, false)
-            //};
-            //var dealer = new Dealer(players, 100000, 8, 5, 500, new Percent(25));
-            //dealer.PlayGame();
-
-
-            //add "report" for final numbers of card counting
+            var gameControl = new Control(1000000, new List<PlayerInfo> { new PlayerInfo { Bankroll = 100, IsCardCounter = false } }, new TableInfo { WhenToShuffleShoe = .25, MaxBet = 100, MinBet = 5, NumberOfDecks = 6 });
+            var cancel = new CancellationToken();
+            gameControl.PlayGame(cancel);
         }
     }
 }

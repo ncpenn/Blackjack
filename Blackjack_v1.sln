@@ -1,13 +1,41 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackjack", "Blackjack_v1\Blackjack.csproj", "{2C9BD0A7-D3B0-4C2A-9A2C-BF56EB419A65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackjackTests", "Blackjack_v1Tests\BlackjackTests.csproj", "{8A5E1ABC-D357-44DB-9DE8-5003890749C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{C48AABCF-3817-4BB4-A675-0875B358687A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rules", "Rules", "{3CAF6006-F218-4754-9EA6-3F4B36001D5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackjack.Rules.BasicStrategy", "Blackjack.Rules.BasicStrategy\Blackjack.Rules.BasicStrategy.csproj", "{B4061E7A-1D6C-4905-8DA9-2421D6861014}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{065B17DA-D823-401D-BB99-515C1A28101D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackjack.Models", "Blackjack.Models\Blackjack.Models.csproj", "{49F70F54-22A3-45EB-976D-F256FDFC6FDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackJack.Rules.CardCounting.AceFive", "BlackJack.Rules.CardCounting.AceFive\BlackJack.Rules.CardCounting.AceFive.csproj", "{4D47D987-4A5F-4B13-A533-BAFFD27C8B70}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actors", "Actors", "{48FF717A-D141-4A53-BB7A-8CE78EDEC888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackjack.Actors", "Blackjack.Actors\Blackjack.Actors.csproj", "{76D64974-566B-4497-B7C7-029DE73CA66B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{4E33ECC2-A37C-4392-B5F2-7021F217199C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackjack.Engine.Game", "Blackjack.Engine.Game\Blackjack.Engine.Game.csproj", "{9A65ABF0-A18A-412B-BB99-47A5CDB75A4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackjack.Contracts", "Contracts\Blackjack.Contracts.csproj", "{56D1E9E0-6C31-43BE-9BED-B55CEFD684DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{973AC6FF-62AD-4F4E-BCC6-79966A50424F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackjack.Rules.CardCounting.Base", "Blackjack.Rules.CardCounting.Base\Blackjack.Rules.CardCounting.Base.csproj", "{0862BF39-816A-4497-8879-955F5F8DE8B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F6E18CD5-5C74-4425-8FF8-9EAF28026933}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActorTests", "TableTests\ActorTests.csproj", "{A2908745-2027-4A39-9C30-5211DA3F9402}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +55,50 @@ Global
 		{C48AABCF-3817-4BB4-A675-0875B358687A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C48AABCF-3817-4BB4-A675-0875B358687A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C48AABCF-3817-4BB4-A675-0875B358687A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4061E7A-1D6C-4905-8DA9-2421D6861014}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4061E7A-1D6C-4905-8DA9-2421D6861014}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4061E7A-1D6C-4905-8DA9-2421D6861014}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4061E7A-1D6C-4905-8DA9-2421D6861014}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49F70F54-22A3-45EB-976D-F256FDFC6FDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49F70F54-22A3-45EB-976D-F256FDFC6FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49F70F54-22A3-45EB-976D-F256FDFC6FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49F70F54-22A3-45EB-976D-F256FDFC6FDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D47D987-4A5F-4B13-A533-BAFFD27C8B70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D47D987-4A5F-4B13-A533-BAFFD27C8B70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D47D987-4A5F-4B13-A533-BAFFD27C8B70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D47D987-4A5F-4B13-A533-BAFFD27C8B70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76D64974-566B-4497-B7C7-029DE73CA66B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76D64974-566B-4497-B7C7-029DE73CA66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76D64974-566B-4497-B7C7-029DE73CA66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76D64974-566B-4497-B7C7-029DE73CA66B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A65ABF0-A18A-412B-BB99-47A5CDB75A4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A65ABF0-A18A-412B-BB99-47A5CDB75A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A65ABF0-A18A-412B-BB99-47A5CDB75A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A65ABF0-A18A-412B-BB99-47A5CDB75A4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D1E9E0-6C31-43BE-9BED-B55CEFD684DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D1E9E0-6C31-43BE-9BED-B55CEFD684DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D1E9E0-6C31-43BE-9BED-B55CEFD684DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D1E9E0-6C31-43BE-9BED-B55CEFD684DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0862BF39-816A-4497-8879-955F5F8DE8B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0862BF39-816A-4497-8879-955F5F8DE8B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0862BF39-816A-4497-8879-955F5F8DE8B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0862BF39-816A-4497-8879-955F5F8DE8B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2908745-2027-4A39-9C30-5211DA3F9402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2908745-2027-4A39-9C30-5211DA3F9402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2908745-2027-4A39-9C30-5211DA3F9402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2908745-2027-4A39-9C30-5211DA3F9402}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B4061E7A-1D6C-4905-8DA9-2421D6861014} = {3CAF6006-F218-4754-9EA6-3F4B36001D5E}
+		{49F70F54-22A3-45EB-976D-F256FDFC6FDE} = {065B17DA-D823-401D-BB99-515C1A28101D}
+		{4D47D987-4A5F-4B13-A533-BAFFD27C8B70} = {3CAF6006-F218-4754-9EA6-3F4B36001D5E}
+		{76D64974-566B-4497-B7C7-029DE73CA66B} = {48FF717A-D141-4A53-BB7A-8CE78EDEC888}
+		{9A65ABF0-A18A-412B-BB99-47A5CDB75A4E} = {4E33ECC2-A37C-4392-B5F2-7021F217199C}
+		{56D1E9E0-6C31-43BE-9BED-B55CEFD684DB} = {973AC6FF-62AD-4F4E-BCC6-79966A50424F}
+		{0862BF39-816A-4497-8879-955F5F8DE8B0} = {3CAF6006-F218-4754-9EA6-3F4B36001D5E}
+		{A2908745-2027-4A39-9C30-5211DA3F9402} = {F6E18CD5-5C74-4425-8FF8-9EAF28026933}
 	EndGlobalSection
 EndGlobal

@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C48AABCF-3817-4BB4-A675-0875B358687A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{76D64974-566B-4497-B7C7-029DE73CA66B}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Console</RootNamespace>
-    <AssemblyName>Console</AssemblyName>
+    <RootNamespace>Blackjack.Actors</RootNamespace>
+    <AssemblyName>Blackjack.Actors</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,21 +44,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Dealer.cs" />
+    <Compile Include="Interfaces\IDealer.cs" />
+    <Compile Include="Interfaces\IPlayer.cs" />
+    <Compile Include="Interfaces\IShoe.cs" />
+    <Compile Include="Interfaces\ITable.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shoe.cs" />
+    <Compile Include="Table.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Blackjack.Engine.Game\Blackjack.Engine.Game.csproj">
-      <Project>{9a65abf0-a18a-412b-bb99-47a5cdb75a4e}</Project>
-      <Name>Blackjack.Engine.Game</Name>
+    <ProjectReference Include="..\Blackjack.Models\Blackjack.Models.csproj">
+      <Project>{49F70F54-22A3-45EB-976D-F256FDFC6FDE}</Project>
+      <Name>Blackjack.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blackjack.Rules.BasicStrategy\Blackjack.Rules.BasicStrategy.csproj">
+      <Project>{b4061e7a-1d6c-4905-8da9-2421d6861014}</Project>
+      <Name>Blackjack.Rules.BasicStrategy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BlackJack.Rules.CardCounting.AceFive\BlackJack.Rules.CardCounting.AceFive.csproj">
+      <Project>{4d47d987-4a5f-4b13-a533-baffd27c8b70}</Project>
+      <Name>BlackJack.Rules.CardCounting.AceFive</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blackjack.Rules.CardCounting.Base\Blackjack.Rules.CardCounting.Base.csproj">
+      <Project>{0862bf39-816a-4497-8879-955f5f8de8b0}</Project>
+      <Name>Blackjack.Rules.CardCounting.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\Contracts\Blackjack.Contracts.csproj">
       <Project>{56d1e9e0-6c31-43be-9bed-b55cefd684db}</Project>
       <Name>Blackjack.Contracts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
