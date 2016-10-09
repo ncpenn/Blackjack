@@ -5,7 +5,7 @@ namespace Blackjack.Actors.Interfaces
 {
     public interface IPlayer
     {
-        HandInformation[] Hands { get; }
+        PlayersHands Hands { get; }
 
         void SetNewHand(uint[] cards);
 

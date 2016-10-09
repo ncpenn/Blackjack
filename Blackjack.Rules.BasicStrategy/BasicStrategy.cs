@@ -13,16 +13,16 @@ namespace Blackjack.Rules.BasicStrategy
             {
                 result = DoSplitRules(handInformation.Cards[0], dealerUpCard);
             }
-            else if (handInformation.IsSoft())
+            else if (handInformation.IsSoft)
             {
-                result = DoSoftRules(handInformation.HandValue(), dealerUpCard);
+                result = DoSoftRules(handInformation.HandValue, dealerUpCard);
             }
             else
             {
-                result = DoHardRules(handInformation.HandValue(), dealerUpCard);
+                result = DoHardRules(handInformation.HandValue, dealerUpCard);
             }
 
-            if (!handInformation.OkayToDouble() && result == Enums.PlayAction.Double)
+            if (!handInformation.OkayToDouble && result == Enums.PlayAction.Double)
             {
                 result = Enums.PlayAction.Stand;
             }

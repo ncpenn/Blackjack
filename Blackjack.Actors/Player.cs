@@ -30,28 +30,22 @@ namespace Blackjack.Actors
             Initialize(bankroll, isCardCounter);
         }
 
-        public HandInformation[] Hands { get; private set; }
+        public PlayersHands Hands { get; private set; }
 
         public IEnumerable<uint> PlayHand(IShoe shoe, uint dealerUpCard, List<uint> visibleCards, uint tableMinBet, uint tableMaxBet)
         {
             var cardsNowVisible = new List<uint>();
-            foreach (var hand in Hands.Where(h => h.Cards.Any()))
+            foreach (var hand in Hands.Hands.Where(h => h.Cards.Any()))
             {
                 hand.SetBet(DetermineBetSize(visibleCards, tableMinBet, tableMaxBet));
                 var playAction = _basicStrategy.DetermineCorrectPlayAction(hand, dealerUpCard);
                 while (playAction != Enums.PlayAction.Stand)
                 {
-                    if (playAction == Enums.PlayAction.Split)
+                    if (playAction == Enums.PlayAction.Split && Hands.CanSplit)
                     {
-                        if (Hands.Where(h => h.Cards.Any()).Count() == 1)
-                        {
-                            Hands[1].CanSplit = false;
-                            Hands[1].Cards.Add(hand.Cards[1]);
-                            hand.Cards.RemoveAt(1);
-                            Hands[1].SetBet(DetermineBetSize(visibleCards, tableMinBet, tableMaxBet));
-                        }
+                        Hands.SetSplit();
                     }
-                    else if(playAction == Enums.PlayAction.Double)
+                    else if (playAction == Enums.PlayAction.Double)
                     {
                         if (hand.GetCurrentBet() * 2 <= _bankroll.Amount)
                         {
@@ -64,7 +58,7 @@ namespace Blackjack.Actors
                     hand.Cards.Add(card);
 
                     playAction = _basicStrategy.DetermineCorrectPlayAction(hand, dealerUpCard);
-                } 
+                }
             }
             return cardsNowVisible;
         }
@@ -97,19 +91,18 @@ namespace Blackjack.Actors
 
         public void SetNewHand(uint[] cards)
         {
-            Hands[0] = new HandInformation();
-            Hands[1] = new HandInformation();
-            Hands[0].Cards.AddRange(cards);
+            Hands = new PlayersHands();
+            Hands.SetMainHand(cards);
         }
 
         public void Settle(HandInformation dealerHand)
         {
-            foreach (var hand in Hands.Where(h => h.Cards.Any()))
+            foreach (var hand in Hands.Hands.Where(h => h.Cards.Any()))
             {
                 var bothBlackjack = dealerHand.IsBlackjack && hand.IsBlackjack;
                 var playerBlackjack = hand.IsBlackjack;
-                var dealerHandGreater = hand.HandValue() < dealerHand.HandValue() && !dealerHand.IsBusted || hand.IsBusted && !dealerHand.IsBusted;
-                var playerHandGreater = hand.HandValue() > dealerHand.HandValue() && !hand.IsBusted || dealerHand.IsBusted && !hand.IsBusted;
+                var dealerHandGreater = hand.HandValue < dealerHand.HandValue && !dealerHand.IsBusted || hand.IsBusted && !dealerHand.IsBusted;
+                var playerHandGreater = hand.HandValue > dealerHand.HandValue && !hand.IsBusted || dealerHand.IsBusted && !hand.IsBusted;
 
                 if (bothBlackjack)
                 {
@@ -135,7 +128,7 @@ namespace Blackjack.Actors
             _bankroll = new Bankroll();
             _bankroll.Amount = (int)startingBankroll;
             _isCardCounter = isCardCounter;
-            Hands = new HandInformation[2];
+            Hands = new PlayersHands();
         }
     }
 }

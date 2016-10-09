@@ -61,7 +61,6 @@ namespace Blackjack.Actors
             {
                 var cards = _shoe.CardRequest(2);
                 _dealer.SetNewHand(cards);
-                _dealer.Hand.CanSplit = false;
                 _visibleCards.Add(cards[0]);
             }
             else if (string.Compare(incomingType, playerType, StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -89,7 +88,6 @@ namespace Blackjack.Actors
 
         public void UpdatePlayStats(PlayStats resultsOfPlay)
         {
-            resultsOfPlay.PlayersSnapshot.Clear();
             resultsOfPlay.PlayersSnapshot.AddRange(_players.Select(p => JsonConvert.SerializeObject(p)));
         }
 

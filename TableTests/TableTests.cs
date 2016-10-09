@@ -13,6 +13,7 @@ namespace TableTests
     {
         private MockRepository _mockRepository;
         private Mock<IDealer> _dealerMock;
+        private Mock<IPlayer> _playerMock;
         private List<IPlayer> _listPlayerMocks;
         private Mock<IShoe> _shoeMock;
 
@@ -20,10 +21,12 @@ namespace TableTests
         {
             _mockRepository = new MockRepository(MockBehavior.Default);
             _dealerMock = _mockRepository.Create<IDealer>();
+            _playerMock = _mockRepository.Create<IPlayer>();
             _shoeMock = _mockRepository.Create<IShoe>();
+
             _listPlayerMocks = new List<IPlayer>
             {
-                _mockRepository.Create<IPlayer>().Object
+                _playerMock.Object
             };
         }
 
@@ -34,6 +37,27 @@ namespace TableTests
             var sut = new Table(1, 2, 1, .25, _listPlayerMocks, _dealerMock.Object, _shoeMock.Object);
 
             sut.EngageDealer();
+
+            _mockRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InitialDealTo_BadType()
+        {
+            var sut = new Table(1, 2, 1, .25, _listPlayerMocks, _dealerMock.Object, _shoeMock.Object);
+            sut.InitialDealTo<object>();
+        }
+
+        [TestMethod]
+        public void InitialDealTo_Player()
+        {
+            var twoCards = new List<uint> { 1, 10 }.ToArray();
+            _shoeMock.Setup(x => x.CardRequest(It.Is<int>(y => y.Equals(2)))).Returns(twoCards);
+            _playerMock.Setup(x => x.SetNewHand(It.Is<uint[]>(y => y.Equals(twoCards))));
+
+            var sut = new Table(1, 2, 1, .25, _listPlayerMocks, _dealerMock.Object, _shoeMock.Object);
+            sut.InitialDealTo<IPlayer>();
 
             _mockRepository.VerifyAll();
         }

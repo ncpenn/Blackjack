@@ -43,6 +43,7 @@
     <Compile Include="Bankroll.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="HandInformation.cs" />
+    <Compile Include="PlayersHands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

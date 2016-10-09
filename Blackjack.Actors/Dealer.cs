@@ -17,7 +17,7 @@ namespace Blackjack.Actors
         public IEnumerable<uint> PlayHand(IShoe _shoe)
         {
             var cardsDealt = new List<uint>();
-            while (Hand.HandValue() < 17)
+            while (Hand.HandValue < 17)
             {
                 var card = _shoe.CardRequest();
                 Hand.Cards.Add(card);
@@ -28,7 +28,7 @@ namespace Blackjack.Actors
 
         public void SetNewHand(uint[] cards)
         {
-            Hand = new HandInformation();
+            Hand = new HandInformation(isDealerHand: true);
             Hand.Cards.AddRange(cards);
         }
     }

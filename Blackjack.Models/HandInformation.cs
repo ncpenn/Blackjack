@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Blackjack.Models
 {
@@ -8,9 +7,9 @@ namespace Blackjack.Models
         private uint _currentBet;
         private bool _canDouble;
 
-        public HandInformation()
+        public HandInformation(bool isDealerHand)
         {
-            _canDouble = true;
+            _canDouble = isDealerHand ? false : true;
             Cards = new List<uint>();
         }
 
@@ -20,17 +19,15 @@ namespace Blackjack.Models
         {
             get
             {
-                return HandValue() >= 21;
+                return HandValue >= 21;
             }
         }
-
-        public bool CanSplit { get; set; } = true;
 
         public bool IsSplitable
         {
             get
             {
-                return Cards.Count == 2 && Cards[0] == Cards[1] && CanSplit;
+                return Cards.Count == 2 && Cards[0] == Cards[1];
             }
         }
 
@@ -43,77 +40,86 @@ namespace Blackjack.Models
             }
         }
 
-        public bool OkayToDouble()
+        public bool OkayToDouble
         {
-            return _canDouble;
+            get
+            {
+                return _canDouble;
+            } 
         }
 
-        public bool IsSoft()
+        public bool IsSoft
         {
-            uint handValue = 0;
-            int? keepAceTillLast = null;
-
-            foreach (var card in Cards)
+            get
             {
-                if (card == 1 && keepAceTillLast == null)
-                {
-                    keepAceTillLast = 1;
-                    continue;
-                }
-                if (card >= 10)
-                {
-                    handValue += 10;
-                }
-                else
-                {
-                    handValue += card;
-                }
-            }
+                uint handValue = 0;
+                int? keepAceTillLast = null;
 
-            if (keepAceTillLast != null)
-            {
-                if (handValue + 11 <= 21)
+                foreach (var card in Cards)
                 {
-                    return true;
+                    if (card == 1 && keepAceTillLast == null)
+                    {
+                        keepAceTillLast = 1;
+                        continue;
+                    }
+                    if (card >= 10)
+                    {
+                        handValue += 10;
+                    }
+                    else
+                    {
+                        handValue += card;
+                    }
                 }
+
+                if (keepAceTillLast != null)
+                {
+                    if (handValue + 11 <= 21)
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
-            return false;
         }
 
-        public uint HandValue()
+        public uint HandValue
         {
-            uint handValue = 0;
-            int? keepAceTillLast = null;
-           
-            foreach (var value in Cards)
+            get
             {
-                if (value == 1 && keepAceTillLast == null)
-                {
-                    keepAceTillLast = 1;
-                    continue;
-                }
-                if (value >= 10)
-                {
-                    handValue += 10;
-                }
-                else
-                {
-                    handValue += value;
-                }
-            }
+                uint handValue = 0;
+                int? keepAceTillLast = null;
 
-            if (keepAceTillLast != null)
-            {
-                if (handValue + 11 <= 21)
+                foreach (var value in Cards)
                 {
-                    handValue += 11;
+                    if (value == 1 && keepAceTillLast == null)
+                    {
+                        keepAceTillLast = 1;
+                        continue;
+                    }
+                    if (value >= 10)
+                    {
+                        handValue += 10;
+                    }
+                    else
+                    {
+                        handValue += value;
+                    }
                 }
-                else
+
+                if (keepAceTillLast != null)
                 {
-                    handValue += 1;
+                    if (handValue + 11 <= 21)
+                    {
+                        handValue += 11;
+                    }
+                    else
+                    {
+                        handValue += 1;
+                    }
                 }
+                return handValue;
             }
-            return handValue;
         }
 
         public uint GetCurrentBet()
